@@ -3,8 +3,10 @@
 
 .cache
 
-# Virtual environment
-venv/
+# Pycharm files
+*venv/
+*.idea/
+*__pycache__/
 
-.idea/
-__pycache__/
+# Data downloaded from dlc_prologue_practical
+*data/
