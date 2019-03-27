@@ -4,7 +4,7 @@
 .cache
 
 # Virtual environment
-/venv/*
+classification/venv/*
 
 .idea
 __pycache__
