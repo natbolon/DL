@@ -4,7 +4,7 @@
 .cache
 
 # Virtual environment
-classification/venv/*
+venv/
 
-.idea
-__pycache__
+.idea/
+__pycache__/
