@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 # File to solve the first miniproject which is classification
 
-# lm270319.1058
+# lm030419.1058
+
 
 import torch
 import dlc_practical_prologue as prologue
+
+
+__author__ = 'Eugène Lemaitre, Natalie Bolón Brun, Louis Munier'
+__version__ = '0.1'
 
 
 def import_data(N, normalize):
