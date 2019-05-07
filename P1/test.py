@@ -63,18 +63,17 @@ r = 10
 # MODEL 1.1
 """ for model 1.1 --> lr=0.1; epochs = 40"""
 #TODO : REPEAT WITH 500 EPOCHS! 
-e = 250
+e = 500
 
 data11 = test_model_fc(train_input, train_classes_one_hot, train_target, runs=r, epochs=e, l_rate=1e-1, verbose=2)
 data12 = test_model_fc(train_input, train_classes_one_hot, train_target, runs=r, epochs=e, l_rate=1e-2, verbose=2)
 data31 = test_model_fc(train_input, train_classes_one_hot, train_target, runs=r, epochs=e, l_rate=1e-3, verbose=2)
-g_names = {'file_name': 'epochs_lr_comparison_fc', 'title': 'Test Error for target prediction', 'y_axis': 'Errors' , 'legend': ['lr=1e-1','lr=1e-2','lr=1e-3']}
+g_names = {'file_name': 'train_m11_hyperparameters_epochs500', 'title': 'Test Error for target prediction', 'y_axis': 'Errors' , 'legend': ['lr=1e-1','lr=1e-2','lr=1e-3']}
 generate_multiple_graphic_loss([data11['error_test'], data12['error_test'], data31['error_test']], g_names, save=True)
 
 
 # MODEL 1.2
 """ for model 1.2 --> lr=0.5; epochs = 25
-"""
 e12 = 75
 
 data12_1 = test_model_joint(train_input, train_classes_one_hot, train_target, runs=r, epochs=e12, w1=0, lr=1, verbose=2)
@@ -84,10 +83,11 @@ data12_3 = test_model_joint(train_input, train_classes_one_hot, train_target, ru
 
 g_names = {'file_name': 'train_m12_hyperparameters', 'title': 'Test Error for target prediction', 'y_axis': 'Errors' , 'legend': ['lr=1', 'lr=0.5', 'lr=0.1']}
 generate_multiple_graphic_loss([data12_1['error_test_m2'], data12_2['error_test_m2'],data12_3['error_test_m2']], g_names, save=True)
+"""
+
 
 # MODEL 2.1
 """ For model 2.1 --> lr=1 for convnet and 0.5 for MLP; epochs=25 for convnet and 15 for MLP
-"""
 e21 = 50
 
 data21_1 = test_model_separate(112, train_input, train_classes_one_hot, train_target, runs=r, epochs=e21, epochs2=15, version=0, lr=1, verbose=2)
@@ -101,12 +101,11 @@ generate_multiple_graphic_loss([data21_1['error_test_m1'], data21_2['error_test_
 g_names = {'file_name': 'train_m22_hyperparameters_target', 'title': 'Test Error for target prediction', 'y_axis': 'Errors' , 'legend': ['lr=1', 'lr=0.5', 'lr=0.1']}
 generate_multiple_graphic_loss([data21_1['error_test_m2'], data21_2['error_test_m2'],data21_3['error_test_m2']], g_names, save=True)
 
-
+"""
 
 
 # MODEL 2.2
 """FOR MODEL 2.2 --> lr=0.5, epochs=30 lr=1; epochs2=15 
-"""
 e22 = 75
 data22_1 = test_model_separate(112, train_input, train_classes_one_hot, train_target, runs=r, epochs=e22, epochs2=15, version=1, lr=1, verbose=2)
 data22_2 = test_model_separate(112, train_input, train_classes_one_hot, train_target, runs=r, epochs=e22, epochs2=15, version=1, lr=0.5, verbose=2)
@@ -122,12 +121,13 @@ generate_multiple_graphic_loss([data22_1['error_test_m12'], data22_2['error_test
 g_names = {'file_name': 'train_m22_hyperparameters_target_long', 'title': 'Test Error for target prediction', 'y_axis': 'Errors' , 'legend': ['lr=1', 'lr=0.5', 'lr=0.1']}
 generate_multiple_graphic_loss([data22_1['error_test_m2'], data22_2['error_test_m2'],data22_3['error_test_m2']], g_names, save=True)
 
+"""
+
 
 
 
 
 # MODEL 3.1
-"""
 """
 e31=75
 data31_1 = test_model_joint(train_input, train_classes_one_hot, train_target, runs=r, epochs=e31, lr=1, verbose=2)
@@ -135,6 +135,8 @@ data31_2 = test_model_joint(train_input, train_classes_one_hot, train_target, ru
 data31_3 = test_model_joint(train_input, train_classes_one_hot, train_target, runs=r, epochs=e31, lr=1e-1, verbose=2)
 g_names = {'file_name': 'train_m31_hyperparameters', 'title': 'Test Error for target prediction', 'y_axis': 'Errors' , 'legend': ['lr=1e-1','lr=1e-2','lr=1e-3']}
 generate_multiple_graphic_loss([data31_1['error_test_m2'], data31_2['error_test_m2'], data31_3['error_test_m2']], g_names, save=True)
+
+"""
 
 
 

@@ -10,7 +10,32 @@ from models import Net_Conv, Net_Full, Net_small_all, Net_fc
 
 def train_model(model, train_input, train_target, test_input=0, test_target=None, epochs=25, \
                 mini_batch_size=100, lr=1e-3, criterion=None, optimizer=None, verbose=2):
-    # use MSE loss by default
+    """
+    Training function for single model with single output
+    If no test set is provided, the function generates a validation set that is modified each run (cross-validation)
+
+    Args:
+        model:          model to be trained
+        train_input:    tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
+        train_target:   tensor of size [n_samples] (integer values corresponding to class of the image or target value
+
+        test_input:     tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
+        test_target:    tensor of size [n_samples] (integer values corresponding to class of the image or target value
+
+        verbose: 0 - loss per each epoch
+                 1 - loss each 5 epochs
+                 2 - modifying loss value along epochs
+        other: epochs, mini_batch_size, lr=learning rate, criterion= loss function, optimizer
+
+    Returns:
+        loss_store:     storage of the train loss along epochs
+        time_store:     storage of the time along epochs
+        error_store:    storage of the train error along epochs
+        error_store_test:   storage of the test error along epochs
+
+    """
+
+    # use Cross Entropy by default
     if not criterion:
         criterion = nn.CrossEntropyLoss()
 
@@ -18,29 +43,32 @@ def train_model(model, train_input, train_target, test_input=0, test_target=None
     if not optimizer:
         optimizer = optim.SGD(model.parameters(), lr=lr)
 
+    # initialize list to store loss and error values
     loss_store = []
     error_store = []
     error_store_test = []
     current_time = 0
     time_store = [current_time]
+
     for e in range(epochs):
+
+        # initialize loss
         sum_loss = 0
         start = time.time()
+
         for b in range(0, train_input.size(0), mini_batch_size):
             output = model(train_input.narrow(0, b, mini_batch_size))
             loss = criterion(output, train_target.narrow(0, b, mini_batch_size))
             model.zero_grad()
             loss.backward()
             sum_loss = sum_loss + loss.item()
-            optimizer.step()
-            #for p in model.parameters():
-            #    p.data.sub_(lr * p.grad.data)
-            #g = 0
-            #for p in model.parameters():
-            #    g += p.grad.norm()
+            optimizer.step() # update gradient
+
         end = time.time()
 
         error_store.append(compute_nb_errors(model, train_input, train_target))
+
+        # evaluate test error along the iterations
         if not isinstance(test_input, int):
             error_store_test.append(compute_nb_errors(model, test_input, test_target))
         else:
@@ -67,7 +95,33 @@ def train_model(model, train_input, train_target, test_input=0, test_target=None
 def train_model_all(model, train_input, train_classes, train_target, test_input=0, test_target=None, epochs=25, \
                     mini_batch_size=100, lr=1e-3, w1=1, w2=1, criterion1=None, criterion2=None, optimizer=None,
                     verbose=2):
+    """
+        Training function for single model with multiple output.
+        If a single loss wants to be used, the corresponding weight must be set to zero
+        If no test set is provided, the function generates a validation set that is modified each run (cross-validation)
 
+        Args:
+            model:          model to be trained
+            train_input:    tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
+            train_target:   tensor of size [n_samples] (integer values corresponding to class of the image or target value
+
+            test_input:     tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
+            test_target:    tensor of size [n_samples] (integer values corresponding to class of the image or target value
+
+            verbose: 0 - loss per each epoch
+                     1 - loss each 5 epochs
+                     2 - modifying loss value along epochs
+            other: epochs, mini_batch_size, lr=learning rate, criterion= loss function, optimizer
+
+        Returns:
+            loss_store:     storage of the train loss along epochs
+            time_store:     storage of the time along epochs
+            error_store:    storage of the train error along epochs
+            error_store_test:   storage of the test error along epochs
+
+    """
+
+    # use Cross Entropy by default
     if not criterion1:
         criterion1 = nn.CrossEntropyLoss()
     if not criterion2:
@@ -77,12 +131,15 @@ def train_model_all(model, train_input, train_classes, train_target, test_input=
     if not optimizer:
         optimizer = optim.SGD(model.parameters(), lr=lr)
 
+    # initialize list to store loss and error values
     loss_store = []
     loss_store_1, loss_store_2 = [], []
     error_store, error_store_test = [], []
     current_time = 0
     time_store = [current_time]
+
     for e in range(epochs):
+        # initialize loss
         sum_loss = 0
         sum_loss_1, sum_loss_2 = 0, 0
         start = time.time()
@@ -93,19 +150,26 @@ def train_model_all(model, train_input, train_classes, train_target, test_input=
             loss2 = criterion2(output_final, train_target.narrow(0, b, mini_batch_size))
             loss = w1 * loss1 + w2 * loss2
             optimizer.zero_grad()
+
             if w1 == 0:
                 loss.backward()  # do not use intermediate loss
             else:
                 loss.backward(retain_graph=True)  # retain graph allows backward pass wrt intermediate loss
+
+            # update losses
             sum_loss = sum_loss + loss.item()
             sum_loss_1 = sum_loss_1 + loss1.item()
             sum_loss_2 = sum_loss_2 + loss2.item()
 
+            # update gradient
             optimizer.step()
+
         end = time.time()
         current_time += end-start
 
         error_store.append(compute_nb_errors(model, train_input, train_target))
+
+        # compute error on test set
         if not isinstance(test_input, int):
             error_store_test.append(compute_nb_errors(model, test_input, test_target))
         else:
@@ -129,11 +193,21 @@ def train_model_all(model, train_input, train_classes, train_target, test_input=
 
 
 def compute_nb_errors(model, input, target, mini_batch_size=100):
+    """
+    Funtion to compute number of errors
+    Args:
+        model:  model trained
+        input:  tensor of size (
+        target:
+        mini_batch_size:
+
+    """
     errors = 0
 
     for b in range(0, input.size(0), mini_batch_size):
         output = model(input.narrow(0, b, mini_batch_size))
-        # when using models with multiple outputs, keep the last one
+
+        # when using models with multiple outputs, keep the last one (target)
         if isinstance(output, tuple):
             output = output[-1]
             _, predicted_classes = output.max(1)

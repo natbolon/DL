@@ -2,8 +2,10 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-
-
+"""
+MODEL FOR CLASS CLASSIFICATION.
+CONVNET WITH SINGLE CHANNEL IMAGE AS INPUT AND 10-CLASS VECTOR AS OUTPUT
+"""
 class Net_Conv(nn.Module):
     def __init__(self, nb_hidden, sig=False):
         super(Net_Conv, self).__init__()
@@ -23,7 +25,11 @@ class Net_Conv(nn.Module):
             x = self.fc2(x)
         return x
 
-# MLP FOR VALUE COMPARISON
+"""
+MLP FOR TARGET LEARNING.
+TAKES A 20x1 INPUT VECTOR CORRESPONDING TO OUTPUT1-OUTPUT2 OF EACH PAIR OF IMAGES. 
+"""
+
 class Net_Full(nn.Module):
     def __init__(self):
         super(Net_Full, self).__init__()
@@ -33,10 +39,14 @@ class Net_Full(nn.Module):
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
-        #return torch.sigmoid(x)
         return x
 
-# MLP FOR FULL TASK
+"""
+MLP FOR TARGET LEARNING
+TAKES AS INPUT A SINGLE-CHANNEL IMAGE RESHAPED IN A 1D VECTOR.
+THE OUTPUT IS A BINARY TARGET FOR EACH PAIR OF IMAGES
+"""
+
 class Net_fc(nn.Module):
     def __init__(self, n_in):
         super(Net_fc, self).__init__()
@@ -50,11 +60,15 @@ class Net_fc(nn.Module):
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
         x = self.fc4(x)
-        #return torch.sigmoid(x)
         return x
 
-
-# NET WITH INTERMEDIATE LOSS - SMALL SIZE
+"""
+NET WITH INTERMEDIATE LOSS
+TAKES AS INPUT A SINGLE-CHANNEL IMAGE RESHAPED IN A 1D VECTOR.
+THE OUTPUTS ARE:
+    A 10-CLASS VECTOR CORRESPONDING TO THE INPUT IMAGE CLASS
+    A BINARY TARGET FOR EACH PAIR OF IMAGES
+"""
 class Net_small_all(nn.Module):
     def __init__(self, nb_h1, nb_h2, nb_h3):
         super(Net_small_all, self).__init__()
@@ -71,6 +85,5 @@ class Net_small_all(nn.Module):
         x_classes = torch.sigmoid(self.fc1(x.view(-1, (self.size_h2 * 7 * 7))))
         x_out = F.relu(self.fc2(x_classes.view(-1, 20)))
         x_out = self.fc3(x_out)
-        #return x_classes, torch.sigmoid(x_out)
         return x_classes, x_out
 
