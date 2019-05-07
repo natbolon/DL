@@ -16,7 +16,10 @@ def to_one_hot(tensor):
 def shuffle(t_input, classes, target):
     idx = [i for i in range(t_input.size(0))]
     random.shuffle(idx)
-    return t_input[idx, :, :, :], classes[idx, :], target[idx, :]
+    if len(target.shape) == 1:
+        return t_input[idx, :, :, :], classes[idx, :], target[idx]
+    else:
+        return t_input[idx, :, :, :], classes[idx, :], target[idx,:]
 
 
 def binarize(target):
