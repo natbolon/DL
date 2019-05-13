@@ -20,7 +20,7 @@ class Sgd(Optimizers):
     def __init__(self):
         Optimizers.__init__(self)
 
-    def optimize(self, eta, *input):
+    def optimize(self, *input, eta):
         for l in input[0]:
             if isinstance(l, Linear):
                 l.bias -= eta * l.gradwrtbias
@@ -37,7 +37,7 @@ class DecreaseSGD(Optimizers):
     def __init__(self):
         Optimizers.__init__(self)
 
-    def optimize(self, epoch, eta=0.1, beta=0.1, *input):
+    def optimize(self, epoch, *input, eta=0.1, beta=0.1):
         for l in input[0]:
             if isinstance(l, Linear):
                 l.bias -= eta/((1+beta*epoch)) * l.gradwrtbias
