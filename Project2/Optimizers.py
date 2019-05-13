@@ -10,7 +10,10 @@ from Sequential import Sequential
 
 class Optimizers():
     def __init__(self):
-        pass
+        self.s = torch.empty((0,0))
+        
+    def __call__(self):
+        raise NotImplementedError('Optimizers : __call__ function is not implemented')
 
     def param(self):
         return []
@@ -20,13 +23,11 @@ class Sgd(Optimizers):
     def __init__(self):
         Optimizers.__init__(self)
 
-    def optimize(self, *input, eta):
+    def __call__(self, *input, eta=0.1):
         for l in input[0]:
             if isinstance(l, Linear):
                 l.bias -= eta * l.gradwrtbias
                 l.weight -= eta * l.gradwrtweight
-
-                #l.define_parameters(weight, bias)
 
     def param(self):
         return []
@@ -37,7 +38,7 @@ class DecreaseSGD(Optimizers):
     def __init__(self):
         Optimizers.__init__(self)
 
-    def optimize(self, epoch, *input, eta=0.1, beta=0.1):
+    def __call__(self, epoch, *input, eta=0.1, beta=0.1):
         for l in input[0]:
             if isinstance(l, Linear):
                 l.bias -= eta/((1+beta*epoch)) * l.gradwrtbias
