@@ -55,6 +55,16 @@ class Sequential(Module):
             if step.param() != []:
                 step.normalize_parameters(mean, std)
                 
+    def uniform_parameters(self):
+        for step in reversed(self.sequence):
+            if step.param() != []:
+                step.uniform_parameters()
+        
+    def xavier_parameters(self):
+        for step in reversed(self.sequence):
+            if step.param() != []:
+                step.xavier_parameters()
+                
     def update_parameters(self, eta):
         for step in reversed(self.sequence):
             if step.param() != []:

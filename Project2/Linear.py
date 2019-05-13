@@ -1,7 +1,9 @@
+import math
 import torch
 from torch import empty
 
 from Module import Module
+
 
 
 class Linear(Module):
@@ -12,8 +14,8 @@ class Linear(Module):
         self.dim_in = dim_in
         self.dim_out = dim_out
         
-        self.bias = torch.empty(1, dim_out)
-        self.weight = torch.empty(dim_out, dim_in)
+        self.bias = torch.empty(1, dim_out).normal_(1, 0.5) #initialize by default with normal distribution (1,0.5)
+        self.weight = torch.empty(dim_out, dim_in).normal_(1, 0.5)
             
         self.gradwrtbias = torch.empty((0,0))
         self.gradwrtweight = torch.empty((0,0))
@@ -41,7 +43,6 @@ class Linear(Module):
     def backward(self, *gradwrtoutput):
         self.gradwrtbias = torch.ones(1, self.x.size(dim=0)).mm(gradwrtoutput[0])
         self.gradwrtweight = gradwrtoutput[0].t().mm(self.x)
-        
         return gradwrtoutput[0].mm(self.weight)
         
     def param(self):
@@ -61,6 +62,14 @@ class Linear(Module):
     def normalize_parameters(self, mean, std):
         self.bias = self.bias.normal_(mean=mean, std=std)
         self.weight = self.weight.normal_(mean=mean, std=std)
+        
+    def uniform_parameters(self):
+        self.bias = self.bias.uniform_()
+        self.weight = self.weight.uniform_()
+        
+    def xavier_parameters(self):
+        std = math.sqrt(2 / (self.weight.size(0) + self.weight.size(1)))
+        self.normalize_parameters(0, std)
         
     def update_parameters(self, eta):
         self.bias -= eta * self.gradwrtbias
