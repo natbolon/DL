@@ -1,9 +1,9 @@
-from dlc_practical_prologue import generate_pair_sets
-from generate_data import binarize, shuffle, normalize_data, to_one_hot
+from src.dlc_practical_prologue import generate_pair_sets
+from src.generate_data import binarize, shuffle, normalize_data, to_one_hot
 from torch.autograd import Variable
 
-from train import test_model_separate, test_model_joint, test_model_fc
-from graphics import generate_graphic_loss, generate_multiple_graphic_loss
+from src.train import test_model_joint, test_model_fc
+from src.graphics import generate_multiple_graphic_loss
 
 print('Generate data')
 train_input, train_target, train_classes, test_input, test_target, test_classes = generate_pair_sets(1000)
@@ -59,10 +59,10 @@ test_input, test_target, test_classes_one_hot, test_classes = Variable(test_inpu
 
 # TRAIN MODELS FOR HYPER-PARAMETER TESTING
 r = 10
-
+"""
 # MODEL 1.1
-""" for model 1.1 --> lr=0.1; epochs = 40"""
-#TODO : REPEAT WITH 500 EPOCHS! 
+ for model 1.1 --> lr=0.1; epochs = 40
+
 e = 500
 
 data11 = test_model_fc(train_input, train_classes_one_hot, train_target, runs=r, epochs=e, l_rate=1e-1, verbose=2)
@@ -71,6 +71,7 @@ data31 = test_model_fc(train_input, train_classes_one_hot, train_target, runs=r,
 g_names = {'file_name': 'train_m11_hyperparameters_epochs500', 'title': 'Test Error for target prediction', 'y_axis': 'Errors' , 'legend': ['lr=1e-1','lr=1e-2','lr=1e-3']}
 generate_multiple_graphic_loss([data11['error_test'], data12['error_test'], data31['error_test']], g_names, save=True)
 
+"""
 
 # MODEL 1.2
 """ for model 1.2 --> lr=0.5; epochs = 25
@@ -146,10 +147,10 @@ generate_multiple_graphic_loss([data31_1['error_test_m2'], data31_2['error_test_
 
 # # convnet with single loss
 # print('Training model 1.2')
-data12 = test_model_joint(train_input, train_classes_one_hot, train_target, runs=5, epochs=25, w1=0, lr=0.5, verbose=2)
-# # convnet with intermediate loss
+data11 = test_model_fc(train_input, train_classes_one_hot, train_target, runs=r, epochs=40, l_rate=1e-1, verbose=2)
+data12 = test_model_joint(train_input, train_classes_one_hot, train_target, runs=r, epochs=25, w1=0, lr=5*1e-1, verbose=2)
 # print('Training model 3.1')
-data31 = test_model_joint(train_input, train_classes_one_hot, train_target, runs=5, epochs=25, lr=0.1, verbose=2)
+data31 = test_model_joint(train_input, train_classes_one_hot, train_target, runs=r, epochs=25, lr=5*1e-1, verbose=2)
 # # multiple models: 1 convnet + 1 MLP
 # print('Training model 2.1')
 #data21 = test_model_separate(112, train_input, train_classes_one_hot, train_target, runs=5, epochs=25, version=1, verbose=2)
@@ -157,11 +158,11 @@ data31 = test_model_joint(train_input, train_classes_one_hot, train_target, runs
 print('Training model 2.2')
 #data2 = test_model_separate(112, train_input, train_classes_one_hot, train_target_bin, runs=5, epochs=25, version=0)
 
-g_names = {'file_name': 'train_separate_m2', 'title': 'Train Error for target prediction', 'y_axis': 'Errors' , 'legend': ['Model 1.2', 'Model 3.1']}
-generate_multiple_graphic_loss([data12['error_test_m2'], data31['error_test_m2']], g_names, [data12['time'], data31['time']], save=False)
+g_names = {'file_name': 'train_separate_m2_short', 'title': 'Train Error for target prediction', 'y_axis': 'Errors' , 'legend': ['Model 1.1', 'Model 1.2', 'Model 3.1']}
+generate_multiple_graphic_loss([data11['error_test'], data12['error_test_m2'], data31['error_test_m2']], g_names, [data11['time'], data12['time'], data31['time']], save=True)
 
-g_names = {'file_name': 'train_separate_m2', 'title': 'Train Error for target prediction', 'y_axis': 'Loss' , 'legend': ['Model 1.2', 'Model 3.1']}
-generate_multiple_graphic_loss([data12['loss'], data31['loss']], g_names, [data12['time'], data31['time']], save=False)
+g_names = {'file_name': 'comparison_joint_models', 'title': 'Train Error for target prediction', 'y_axis': 'Loss' , 'legend': ['Model 1.2', 'Model 3.1']}
+generate_multiple_graphic_loss([data11['loss'], data12['loss'], data31['loss']], g_names, [data11['time'], data12['time'], data31['time']], save=False)
 
 """
 

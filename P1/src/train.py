@@ -2,8 +2,8 @@ import time
 import torch
 from torch import nn, optim
 
-from generate_data import shuffle, to_one_hot
-from models import Net_Conv, Net_Full, Net_small_all, Net_fc
+from src.generate_data import shuffle
+from src.models import Net_Conv, Net_Full, Net_small_all, Net_fc
 
 
 # Define training function for two-stage model
