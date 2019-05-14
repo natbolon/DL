@@ -8,7 +8,7 @@ from Loss import Loss, LossMSE, CrossEntropy
 
 
 class Sequential(Module):
-    """Child class of Module, create a DLN by giving a sequence of layers"""
+    """Child class of Module, create a NN by giving a sequence of layers"""
     
     def __init__(self, *sequence, loss=None):
         self.sequence = []
@@ -25,9 +25,9 @@ class Sequential(Module):
                 self.sequence.append(arg)
             else:
                 if i%2 == 0:
-                    raise ValueError('Wrong argument given to Sequential a Linear layer was expected as argument {}.'.format(i+1))
+                    raise ValueError('Wrong argument given to Sequential. A Linear layer was expected as argument {}.'.format(i+1))
                 elif isinstance(arg, Loss) and i != len(sequence):
-                    raise ValueError('Wrong argument given to Sequential the loss must be the last argument given.')
+                    raise ValueError('Wrong argument given to Sequential. The loss must be the last argument given.')
                 else:
                     raise ValueError('Wrong argument given to Sequential an Activation function was expected as argument {}.'.format(i+1))
                     

@@ -7,6 +7,7 @@ from Module import Module
 
 
 class Linear(Module):
+    """ Child class of Module. Implements a fully connected layer"""
     def __init__(self, dim_in, dim_out, dropout=None):
         self.x = torch.empty((0,0))
         self.s = torch.empty((0,0))
@@ -31,6 +32,7 @@ class Linear(Module):
         self.dropout_mask = torch.empty((0,0))
     
     def forward(self, *input):
+        # Compute forward pass and store input
         self.x = input[0]
         self.s = self.x.mm(self.weight.t()) + self.bias
         
@@ -41,6 +43,7 @@ class Linear(Module):
             return self.s
 
     def backward(self, *gradwrtoutput):
+        # Compute backward pass and store gradient
         self.gradwrtbias = torch.ones(1, self.x.size(dim=0)).mm(gradwrtoutput[0])
         self.gradwrtweight = gradwrtoutput[0].t().mm(self.x)
         return gradwrtoutput[0].mm(self.weight)
@@ -60,21 +63,26 @@ class Linear(Module):
             self.bias = bias
         
     def normalize_parameters(self, mean, std):
+        # Initialization of weight and bias with normally distributed values
         self.bias = self.bias.normal_(mean=mean, std=std)
         self.weight = self.weight.normal_(mean=mean, std=std)
         
     def uniform_parameters(self):
+        # Initialization of weight and bias with uniformly distributed values between [0,1]
         self.bias = self.bias.uniform_()
         self.weight = self.weight.uniform_()
         
     def xavier_parameters(self):
+        # Initialization of parameters with normally distributed values with std= sqrt(2/(width_layer + height_layer))
         std = math.sqrt(2 / (self.weight.size(0) + self.weight.size(1)))
         self.normalize_parameters(0, std)
         
     def update_parameters(self, eta):
+        # Update parameters by gradient descent if no optimizer is specified
         self.bias -= eta * self.gradwrtbias
         self.weight -= eta * self.gradwrtweight
         
     def update_dropout(self):
+        # Update dropout mask
         self.dropout_mask = torch.randint(101, self.s.size())
         self.dropout_mask = (self.dropout_mask >= self.dropout).type(torch.FloatTensor)

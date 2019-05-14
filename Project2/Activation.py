@@ -63,8 +63,6 @@ class Sigmoid(Activation):
         self.s = x
         return 1/(1 + torch.exp(-self.p_lambda*x))
 
-        
-
     def backward(self, *gradwrtoutput):
         return torch.exp(-self.s * self.p_lambda) / (torch.exp(-self.s * self.p_lambda) + 1).pow(2) * (gradwrtoutput[0])
 
