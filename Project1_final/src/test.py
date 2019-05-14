@@ -1,5 +1,5 @@
 from random import seed
-
+import matplotlib.pyplot as plt
 import torch
 
 from torch.autograd import Variable
@@ -10,6 +10,10 @@ from src.graphics import generate_multiple_graphic_loss, generate_graphic_two_mo
 from src.train import test_model_fc, test_model_separate, test_model_joint
 
 def run():
+
+    # Hide plots
+    plt.ioff()
+    print('ATTENTION: PLOTS WILL NOT BE SHOWN. \nALL OF THEM ARE STOREM IN THE OUTPUT FOLDER')
 
     # set seed for reproducibility purposes
     seed(28)
@@ -42,6 +46,7 @@ def run():
     v = 3  # verbose
 
 
+    print('\n --- Evaluate models for hyperparameter tunning ---')
     # Hyperparameter tunning for model 1.1
     print('Hyperparameter tunning for Model 1.1')
     e = 500
@@ -110,7 +115,7 @@ def run():
     generate_multiple_graphic_loss([mod['error_test_m2'] for mod in m], g_names, save=True)
 
     ### EVALUATE THE DIFFERENT MODELS IN THE TEST SET
-    print('\nEvaluate models with TEST set')
+    print('\n----Evaluate models with TEST set----')
 
     print('\nEvaluate model 1.1')
     # evaluate model 1.1 in TEST set

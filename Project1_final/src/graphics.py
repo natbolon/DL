@@ -60,7 +60,7 @@ def generate_graphic_two_models(loss1, loss2, data, version='columns', save=Fals
 
     if save:
         plt.savefig('../output/{}.pdf'.format(data['file_name']), bbox_inches='tight')
-    plt.show()
+    plt.close(fig)
 
 
 
@@ -144,4 +144,4 @@ def generate_multiple_graphic_loss(loss_list, data, time=None, version='columns'
 
     if save:
         plt.savefig('../output/{}.pdf'.format(data['file_name']), bbox_inches='tight')
-    plt.show()
+    plt.close(fig)
