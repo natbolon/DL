@@ -20,14 +20,15 @@ class Optimizers():
 
 
 class Sgd(Optimizers):
-    def __init__(self):
+    def __init__(self, eta=0.1):
         Optimizers.__init__(self)
+        self.eta=eta
 
-    def __call__(self, *input, eta=0.1):
+    def __call__(self, *input):
         for l in input[0]:
             if isinstance(l, Linear):
-                l.bias -= eta * l.gradwrtbias
-                l.weight -= eta * l.gradwrtweight
+                l.bias -= self.eta * l.gradwrtbias
+                l.weight -= self.eta * l.gradwrtweight
 
     def param(self):
         return []
@@ -35,14 +36,15 @@ class Sgd(Optimizers):
 
 
 class DecreaseSGD(Optimizers):
-    def __init__(self):
+    def __init__(self, eta):
         Optimizers.__init__(self)
+        self.eta = eta
 
-    def __call__(self, epoch, *input, eta=0.1, beta=0.1):
+    def __call__(self, epoch, *input, beta=0.1):
         for l in input[0]:
             if isinstance(l, Linear):
-                l.bias -= eta/((1+beta*epoch)) * l.gradwrtbias
-                l.weight -= eta/((1+beta*epoch)) * l.gradwrtweight
+                l.bias -= self.eta/((1+beta*epoch)) * l.gradwrtbias
+                l.weight -= self.eta/((1+beta*epoch)) * l.gradwrtweight
 
 
     def param(self):
