@@ -12,6 +12,11 @@ from data_generation import generate_disc_set, plot_disc
 from evalute_models import compute_number_error, evaluate_model, train_model
 
 def main():
+
+    # Do NOT show plots
+    plt.ioff()
+    print('ATTENTION: PLOTS WILL NOT BE SHOWN. \nALL OF THEM ARE STORED IN THE OUTPUT FOLDER')
+
     # Generate data
     print('Generate data')
     Sample_number = 1000
@@ -131,7 +136,7 @@ def main():
 
 
     # PLOT TO COMPARE OPTIMIZERS
-    plt.figure(figsize=(10,4))
+    fig = plt.figure(figsize=(10,4))
     plt.plot(range(0, epochs_number), my_loss_1, linewidth=1)
     plt.plot(range(0, epochs_number), my_loss_2, linewidth=1)
     plt.plot(range(0, epochs_number_adam), my_loss_3, linewidth=1)
@@ -139,7 +144,7 @@ def main():
     plt.title("Loss")
     plt.xlabel("Epochs")
     plt.savefig('output/compare_optimizers.pdf', bbox_inches='tight')
-    plt.show()
+    plt.close(fig)
 
 
     # Model 4. Dropout; SGD
@@ -174,14 +179,14 @@ def main():
 
 
     # PLOT TO COMPARE DROPOUT AND NO DROPOUT
-    plt.figure(figsize=(10,4))
+    fig = plt.figure(figsize=(10,4))
     plt.plot(range(0, epochs_number), my_loss_1, linewidth=1)
     plt.plot(range(0, epochs_number), my_loss_4, linewidth=1)
     plt.legend(["Without Dropout", "With Dropout"])
     plt.title("Loss")
     plt.xlabel("Epochs")
     plt.savefig('output/compare_dropout.pdf', bbox_inches='tight')
-    plt.show()
+    plt.close(fig)
 
 
     print('\nEvaluation of different activation functions\n')
@@ -274,7 +279,7 @@ def main():
 
     
     # PLOT TO COMPARE EFFECT OF DIFFERENT ACTIVATIONS
-    plt.figure(figsize=(10,4))
+    fig = plt.figure(figsize=(10,4))
     plt.plot(range(0, epochs_number), my_loss_1, linewidth=0.5)
     plt.plot(range(0, epochs_number), my_loss_5, linewidth=0.5, alpha=0.8)
     plt.plot(range(0, epochs_number), my_loss_6, linewidth=0.5, alpha=0.8)
@@ -283,7 +288,7 @@ def main():
     plt.title("Loss")
     plt.xlabel("Epochs")
     plt.savefig('output/compare_activations.pdf', bbox_inches='tight')
-    plt.show()
+    plt.close(fig)
 
     print('\nEvaluation of base model with MSE loss\n')
 

@@ -31,11 +31,13 @@ def plot_disc(data_in, data_target, title):
 
     """
     fs = 20
+    fig = plt.figure(figsize=(6,6))
     plt.scatter(data_in[(data_target[:, 1] == 1), 0], data_in[(data_target[:, 1] == 1), 1], color="c", s=20)
     plt.scatter(data_in[(data_target[:, 1] == 0), 0], data_in[(data_target[:, 1] == 0), 1], color="g", s=20)
     plt.title(title, fontsize=fs)
     plt.legend(["1", "0"])
-    plt.show()
+    plt.savefig('output/{}.pdf'.format(title))
+    plt.close(fig)
 
 
 def plot_result(data_in, data_target, data_class, train=True, fname=None):
@@ -54,11 +56,11 @@ def plot_result(data_in, data_target, data_class, train=True, fname=None):
     zero_id_as_one = torch.mul((data_target[:, 1] == 0), (data_class == 1))
     zero_id_as_zero = torch.mul((data_target[:, 1] == 0), (data_class == 0))
 
-    fig, ax = plt.subplots(1, 1, figsize=(6, 6))
-    ax.scatter(data_in[one_id_as_one, 0], data_in[one_id_as_one, 1], color="c", s=20)
-    ax.scatter(data_in[zero_id_as_zero, 0], data_in[zero_id_as_zero, 1], color="g", s=20)
-    ax.scatter(data_in[one_id_as_zero, 0], data_in[one_id_as_zero, 1], color="r", s=20)
-    ax.scatter(data_in[zero_id_as_one, 0], data_in[zero_id_as_one, 1], color="y", s=20)
+    fig = plt.figure(figsize=(6, 6))
+    plt.scatter(data_in[one_id_as_one, 0], data_in[one_id_as_one, 1], color="c", s=20)
+    plt.scatter(data_in[zero_id_as_zero, 0], data_in[zero_id_as_zero, 1], color="g", s=20)
+    plt.scatter(data_in[one_id_as_zero, 0], data_in[one_id_as_zero, 1], color="r", s=20)
+    plt.scatter(data_in[zero_id_as_one, 0], data_in[zero_id_as_one, 1], color="y", s=20)
 
     if train:
         plt.title("Result on train data", fontsize=fs)
@@ -74,7 +76,7 @@ def plot_result(data_in, data_target, data_class, train=True, fname=None):
         fname = fname + f_n
         plt.savefig('output/{}.pdf'.format(fname), bbox_inches='tight')
 
-    plt.show()
+    plt.close(fig)
 
 
 def plot_loss(epochs, loss, fname=None):
@@ -85,13 +87,13 @@ def plot_loss(epochs, loss, fname=None):
     :param fname: (str). If None, do not save image. Otherwise, save image in output folder with name fname.
     """
     fs = 20
-    fig, ax = plt.subplots(1, 1, figsize=(10, 4))
-    ax.plot(epochs, loss)
-    ax.set_title("Loss", fontsize=fs)
-    ax.set_xlabel("Epoch", fontsize=fs)
-    ax.set_ylabel("Loss", fontsize=fs)
+    fig = plt.figure(figsize=(10, 4))
+    plt.plot(epochs, loss)
+    plt.title("Loss", fontsize=fs)
+    plt.xlabel("Epoch", fontsize=fs)
+    plt.ylabel("Loss", fontsize=fs)
     if isinstance(fname, str):
         plt.savefig('output/{}_loss.pdf'.format(fname), bbox_inches='tight')
-    plt.show()
+    plt.close(fig)
 
 
