@@ -13,7 +13,7 @@ These instructions contain explanations of the structure of the code and how to 
 
 The project has the following folder (and file) structure:
 
-* `data/`. Directory containing original dataset from LINQS. [online] Linqs.soe.ucsc.edu. Available at: https://linqs.soe.ucsc.edu/node/236 [Accessed 11 Jan. 2019].
+* `output/`. Directory containing plots generated when executing `test.py`
 
 * `src/`. Folder containing the actual code files for the project:
     * `dlc_practical_prologue.py` Contains helper functions to obtain, load and parse the data.
@@ -62,7 +62,7 @@ Where for both the training and test of the models, a percentage of the complete
 
 Additionally, the program generates different plots that are stored in `../output`
 
-The whole program may take up to 4 hours to complete the execution. 
+The whole program may take up to **4 hours to complete the execution**. 
 
 
 ## Authors
