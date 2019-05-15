@@ -19,11 +19,17 @@ class Loss(Module):
         return []
 
     
-class LossMSE(Loss):   
+class LossMSE(Loss):
+    """ Child of class Loss. Implements MSE loss"""
     def __init__(self):
         Loss.__init__(self)
     
     def forward( self , output, target_output ):
+        """
+        :param output: tensor generated from the model given an input
+        :param target_output: tensor with ground truth labels of the input
+        :return: (float) loss evaluated through MSE criterion
+        """
         self.output = output
         self.target_output = target_output
         loss = (output - target_output).pow(2).mean()  # (dim=0).sum()
@@ -31,22 +37,34 @@ class LossMSE(Loss):
 
 
     def backward ( self ):
+        """
+        :return: (tensor) gradient of loss with respect to the output of the layer
+        """
         return 2*(self.output - self.target_output)/self.output.numel()  # size(dim=0)
 
     def param ( self ) :
         return []
     
 class CrossEntropy(Loss):
+    """ Child of class Loss. Implements Cross Entropy loss"""
     def __init__(self):
         Loss.__init__(self)
     
     def forward( self , output, target_output ):
+        """
+        :param output: tensor generated from the model given an input
+        :param target_output: tensor with ground truth labels of the input
+        :return: (float) loss evaluated through Cross Entropy criterion
+        """
         self.output = output
         self.target_output = target_output
         loss =  -1./output.size(dim=0) * ( output[ (torch.arange(0, output.size(dim=0) )).type(torch.long), target_output ].sum() - output.exp().sum(dim=1).log().sum() ) 
         return loss
         
     def backward(self):
+        """
+        :return: (tensor) gradient of loss with respect to the output of the layer
+        """
         grad = empty(self.output.size())
         for i in range(0, self.output.size(dim=0)):
             grad[i,:] = self.output[i,:].exp().div_( self.output[i,:].exp().sum())
