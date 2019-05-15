@@ -2,8 +2,11 @@ import time
 import torch
 from torch import nn, optim
 
-from src.generate_data import shuffle
-from src.models import Net_Conv, Net_Full, Net_small_all, Net_fc
+from generate_data import shuffle
+from models import Net_Conv, Net_Full, Net_small_all, Net_fc
+
+import cProfile
+
 
 def train_model(model, train_input, train_target, test_input=0, test_target=None, epochs=25, \
                 mini_batch_size=100, lr=1e-3, criterion=None, optimizer=None, verbose=2):
@@ -447,10 +450,15 @@ def test_model_fc(train_i_org, train_c_org, train_t_org, test_i_org=None, test_c
 
         # _, train_t = train_t.max(1)
         #  train model
+        
+        
+        pr=cProfile.Profile()
+        pr.enable()
         l, t, e, et = train_model(model, train_i.view(-1, 2 * im_size * im_size), train_t,
                                   test_i.view(-1, 2 * im_size * im_size), test_t, lr=l_rate, verbose=verbose,
                                   epochs=epochs)
 
+        pr.disable()
         data['loss'].append(l)
         data['time'].append(t)
         data['error'].append(e)
@@ -469,4 +477,5 @@ def test_model_fc(train_i_org, train_c_org, train_t_org, test_i_org=None, test_c
     print('Model with {} parameters'.format(p))
     errors = torch.tensor(data['nb_error_test']).type(torch.FloatTensor)
     print('Mean error: {:0.2f} Std deviation in error: {:0.2f}'.format(errors.mean(), errors.std()))
+    pr.print_stats(sort="calls")
     return data

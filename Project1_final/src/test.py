@@ -4,10 +4,10 @@ import torch
 
 from torch.autograd import Variable
 
-from src.dlc_practical_prologue import generate_pair_sets
-from src.generate_data import shuffle, normalize_data
-from src.graphics import generate_multiple_graphic_loss, generate_graphic_two_models
-from src.train import test_model_fc, test_model_separate, test_model_joint
+from dlc_practical_prologue import generate_pair_sets
+from generate_data import shuffle, normalize_data
+from graphics import generate_multiple_graphic_loss, generate_graphic_two_models
+from train import test_model_fc, test_model_separate, test_model_joint
 
 def run():
 
