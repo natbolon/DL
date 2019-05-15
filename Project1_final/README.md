@@ -28,7 +28,7 @@ The project has the following folder (and file) structure:
 
 To run the main program, the `test.py` has to be executed from the `\src` directory:
 ```
-cd src/
+cd Proj1/src/
 python test.py
 ``` 
 
