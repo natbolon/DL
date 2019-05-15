@@ -24,7 +24,7 @@ def main():
     test_input, test_target = generate_disc_set(Sample_number)
 
     # Visualize data
-    plot_disc(train_input, train_target, "Train data before normalization")
+    #plot_disc(train_input, train_target, "Train data before normalization")
 
     # Normalize data
     mu, std = train_input.mean(0), train_input.std(0)
@@ -32,8 +32,8 @@ def main():
     test_input.sub_(mu).div_(std)
 
     # Plot train and test samples after normalization
-    plot_disc(train_input, train_target, "Train data after normalization")
-    plot_disc(test_input, test_target, "Test data after normalization")
+    #plot_disc(train_input, train_target, "Train data after normalization")
+    #plot_disc(test_input, test_target, "Test data after normalization")
 
     # Define constants along the test
     hidden_nb = 25
@@ -73,7 +73,7 @@ def main():
     # Evalute model and produce plots
     evaluate_model(model_1, train_input, train_target, test_input, test_target, my_loss_1, mname=mname)
 
-
+    
     # Model 2. No dropout; decreasing learning rate (DecreaseSGD)
     print('\nModel 2: Optimizer: DecreaseSGD; No dropout; ReLU; CrossEntropy')
 

@@ -36,19 +36,28 @@ class Relu(Activation):
     def __init__(self):
         Activation.__init__(self)
     
-    def forward(self, x):
+    def forward_old(self, x):
         self.s = x
         
-        y = empty(self.s.size()).zero_()
+        y = torch.empty(self.s.size()).zero_()
         y[x>0] = x[x>0]
         
         return y
+    
+    def forward(self, x):
+        self.s = x
+        y = torch.empty(self.s.size()).zero_()
+        return torch.max(x, y)
 
-    def backward(self, *gradwrtoutput):
-        y = empty(gradwrtoutput[0].size()).zero_()
+    def backward_old(self, *gradwrtoutput):
+        y = torch.empty(gradwrtoutput[0].size()).zero_()
         y[self.s > 0] = gradwrtoutput[0][self.s > 0]
         
         return y
+    
+    def backward(self, *gradwrtoutput):
+        y = torch.empty(gradwrtoutput[0].size()).zero_()
+        return (torch.eq(y, torch.min(y, self.s))).type(torch.FloatTensor).mul(gradwrtoutput[0])
 
     def param(self):
         return []
