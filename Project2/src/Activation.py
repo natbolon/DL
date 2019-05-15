@@ -22,10 +22,18 @@ class Tanh(Activation):
         Activation.__init__(self)
         
     def forward(self, x):
+        """
+        :param x: tensor generated as output of a linear layer
+        """
         self.s = x
         return x.tanh()
 
     def backward(self, *gradwrtoutput):
+        """
+        Computes gradient wrt to the function
+        :param gradwrtoutput: gradient accumulated from the posterior layers
+        :return: updated gradient
+        """
         return (1 - (self.s.tanh()).pow(2)) * (gradwrtoutput[0])
         
     def param(self):
@@ -35,27 +43,22 @@ class Tanh(Activation):
 class Relu(Activation):
     def __init__(self):
         Activation.__init__(self)
-    
-    def forward_old(self, x):
-        self.s = x
-        
-        y = torch.empty(self.s.size()).zero_()
-        y[x>0] = x[x>0]
-        
-        return y
+
     
     def forward(self, x):
+        """
+        :param x: tensor generated as output of a linear layer
+        """
         self.s = x
         y = torch.empty(self.s.size()).zero_()
         return torch.max(x, y)
-
-    def backward_old(self, *gradwrtoutput):
-        y = torch.empty(gradwrtoutput[0].size()).zero_()
-        y[self.s > 0] = gradwrtoutput[0][self.s > 0]
-        
-        return y
     
     def backward(self, *gradwrtoutput):
+        """
+        Computes gradient wrt to the function
+        :param gradwrtoutput: gradient accumulated from the posterior layers
+        :return: updated gradient
+        """
         y = torch.empty(gradwrtoutput[0].size()).zero_()
         return (torch.eq(y, torch.min(y, self.s))).type(torch.FloatTensor).mul(gradwrtoutput[0])
 
@@ -69,10 +72,18 @@ class Sigmoid(Activation):
         self.p_lambda = p_lambda
     
     def forward(self, x):
+        """
+        :param x: tensor generated as output of a linear layer
+        """
         self.s = x
         return 1/(1 + torch.exp(-self.p_lambda*x))
 
     def backward(self, *gradwrtoutput):
+        """
+        Computes gradient wrt to the function
+        :param gradwrtoutput: gradient accumulated from the posterior layers
+        :return: updated gradient
+        """
         return torch.exp(-self.s * self.p_lambda) / (torch.exp(-self.s * self.p_lambda) + 1).pow(2) * (gradwrtoutput[0])
 
 

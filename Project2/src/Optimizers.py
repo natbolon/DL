@@ -28,6 +28,10 @@ class Sgd(Optimizers):
         self.eta=eta
 
     def __call__(self, *input):
+        """
+        Perform parameter update
+        :param input: model.parameters()
+        """
         # Iterate through the layers of the network and update parameters of the Linear ones
         for l in input[0]:
             if isinstance(l, Linear):
@@ -49,6 +53,12 @@ class DecreaseSGD(Optimizers):
         self.eta = eta
 
     def __call__(self, epoch, *input, beta=0.1):
+        """
+        Perform parameter update
+        :param epoch: current epoch
+        :param input: model.parameters()
+        :param beta: decay parameter
+        """
         # Iterate through the layers of the network and update parameters of the Linear ones
         for l in input[0]:
             if isinstance(l, Linear):
@@ -82,6 +92,10 @@ class Adam(Optimizers):
         
 
     def __call__(self, *input):
+        """
+        Perform parameter update
+        :param input: model.parameters()
+        """
         # Initialize moment estimators
         if self.m1_w is None:
             self.m1_w = [torch.zeros(l.gradwrtweight.size()) for l in input[0] if isinstance(l, Linear)]
