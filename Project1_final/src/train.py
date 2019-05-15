@@ -14,25 +14,20 @@ def train_model(model, train_input, train_target, test_input=0, test_target=None
     Training function for single model with single output
     If no test set is provided, the function generates a validation set that is modified each run (cross-validation)
 
-    Args:
-        model:          model to be trained
-        train_input:    tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
-        train_target:   tensor of size [n_samples] (integer values corresponding to class of the image or target value
-
-        test_input:     tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
-        test_target:    tensor of size [n_samples] (integer values corresponding to class of the image or target value
-
-        verbose: 0 - loss per each epoch
-                 1 - loss each 5 epochs
-                 2 - modifying loss value along epochs
-        other: epochs, mini_batch_size, lr=learning rate, criterion= loss function, optimizer
-
-    Returns:
-        loss_store:     storage of the train loss along epochs
-        time_store:     storage of the time along epochs
-        error_store:    storage of the train error along epochs
-        error_store_test:   storage of the test error along epochs
-
+    :param model: model to be trained
+    :param train_input: tensor of size [n_samples, 1, 14, 14]
+    :param train_target: tensor of size [n_samples]
+    :param test_input: tensor of size [n_samples, 1, 14, 14]
+    :param test_target: tensor of size [n_samples]
+    :param epochs: number of iterations along all the data samples
+    :param mini_batch_size: size of the batch after which the parameters are updated
+    :param lr: step size/ learning rate
+    :param optimizer: pytorch optimizers for training
+    :param verbose: 0 - full information
+                    1 - loss each 5 epochs
+                    2 - modifying loss value along epochs
+                    3 - evolution of training as percentage of completed epochs
+    :return: 4 different lists of the evolution of the errors, loss or time along the epochs.
     """
 
     # use Cross Entropy by default
@@ -97,29 +92,29 @@ def train_model_all(model, train_input, train_classes, train_target, test_input=
                     mini_batch_size=100, lr=1e-3, w1=1, w2=1, criterion1=None, criterion2=None, optimizer=None,
                     verbose=2):
     """
-        Training function for single model with multiple output.
-        If a single loss wants to be used, the corresponding weight must be set to zero
-        If no test set is provided, the function generates a validation set that is modified each run (cross-validation)
+    Training function for single model with multiple output.
+    If a single loss wants to be used, the corresponding weight must be set to zero
+    If no test set is provided, the function generates a validation set that is modified each run (cross-validation)
 
-        Args:
-            model:          model to be trained
-            train_input:    tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
-            train_target:   tensor of size [n_samples] (integer values corresponding to class of the image or target value
-
-            test_input:     tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
-            test_target:    tensor of size [n_samples] (integer values corresponding to class of the image or target value
-
-            verbose: 0 - loss per each epoch
-                     1 - loss each 5 epochs
-                     2 - modifying loss value along epochs
-            other: epochs, mini_batch_size, lr=learning rate, criterion= loss function, optimizer
-
-        Returns:
-            loss_store:     storage of the train loss along epochs
-            time_store:     storage of the time along epochs
-            error_store:    storage of the train error along epochs
-            error_store_test:   storage of the test error along epochs
-
+    :param model: model to be trained
+    :param train_input: tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
+    :param train_classes: tensor of size [n_samples, 1]
+    :param train_target: tensor of size [n_samples] (integer values corresponding to class of the image or target value)
+    :param test_input: tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
+    :param test_target: tensor of size [n_samples] (integer values corresponding to class of the image or target value)
+    :param epochs: number of iterations along all the data samples
+    :param mini_batch_size: size of the batch after which the parameters are updated
+    :param lr: step size/ learning rate
+    :param w1: weight of loss 1 in the final loss
+    :param w2: weight of loss 2 in the final loss
+    :param criterion1: loss function
+    :param criterion2: loss function
+    :param optimizer: pytorch optimizers for training
+    :param verbose: 0 - full information
+                    1 - loss each 5 epochs
+                    2 - modifying loss value along epochs
+                    3 - evolution of training as percentage of completed epochs
+    :return: 6 different lists of the evolution of the errors, loss or time along the epochs.
     """
 
     # use Cross Entropy by default
@@ -199,14 +194,14 @@ def train_model_all(model, train_input, train_classes, train_target, test_input=
 
 def compute_nb_errors(model, input, target, mini_batch_size=100):
     """
-    Funtion to compute number of errors
-    Args:
-        model:  model trained
-        input:  tensor of size (
-        target:
-        mini_batch_size:
 
+    :param model: model already trained
+    :param input: tensor of size [n_samples, 1, 14, 14] or [n_samples, 20]
+    :param target: tensor of size [n_samples] (integer values corresponding to the target value)
+    :param mini_batch_size: size of the batch to be evaluated
+    :return: (int) number of samples misclassified
     """
+
     errors = 0
 
     for b in range(0, input.size(0), mini_batch_size):
@@ -225,6 +220,29 @@ def compute_nb_errors(model, input, target, mini_batch_size=100):
 
 def test_model_separate(train_i_org, train_c_org, train_t_org, test_i_org=None, test_c_org=None, test_t_org=None,
                         runs=10, epochs=25, epochs2=25, version=0, lr=0.5, lr2=0.5, verbose=2):
+    """
+    Train and test Models 2.1 and 2.2
+
+    :param train_i_org: tensor of size [n_samples, 1, 14, 14]
+    :param train_c_org: tensor of size [n_samples, 1]
+    :param train_t_org: tensor of size [n_samples]
+    :param test_i_org: tensor of size [n_samples, 1, 14, 14]
+    :param test_c_org: tensor of size [n_samples, 1]
+    :param test_t_org: tensor of size [n_samples]
+    :param runs: number of full train and evaluation of the model. (to estimate mean and std of the error)
+    :param epochs: number of iterations along all the data samples for model 1
+    :param epochs2: number of iterations along all the data samples for model 2
+    :param version: 0 - if a simple model is used for the class classification task
+                    1 - if two models are used for the class classification task
+    :param lr: step size/ learning rate for model 1
+    :param lr2: step size/ learning rate for model 2
+    :param verbose: 0 - full information
+                    1 - loss each 5 epochs
+                    2 - modifying loss value along epochs
+                    3 - evolution of training as percentage of completed epochs
+    :return: data (dictionary). stores losses, num of errors and time of the different models.
+
+    """
     # shuffle train
     im_size = train_i_org.size(2)
 
@@ -364,6 +382,27 @@ def test_model_separate(train_i_org, train_c_org, train_t_org, test_i_org=None, 
 def test_model_joint(train_i_org, train_c_org, train_t_org, test_i_org=None, test_c_org=None, test_t_org=None,
                      params_model=[2 ** 6, 2 ** 6, 2 ** 4], runs=10,
                      epochs=25, w1=1, w2=1, verbose=2, lr=0.5):
+    """
+    Train and test Model 1.2 and Model 3.1
+    :param train_i_org: tensor of size [n_samples, 1, 14, 14]
+    :param train_c_org: tensor of size [n_samples, 1]
+    :param train_t_org: tensor of size [n_samples]
+    :param test_i_org: tensor of size [n_samples, 1, 14, 14]
+    :param test_c_org: tensor of size [n_samples, 1]
+    :param test_t_org: tensor of size [n_samples]
+    :param params_model: size of the different layers of the network
+    :param runs: number of full train and evaluation of the model. (to estimate mean and std of the error)
+    :param epochs: number of iterations along all the data samples for model 1
+    :param w1: weight of the first loss on the final loss
+    :param w2: weight of the second loss on the final loss
+    :param lr: step size/ learning rate for model 1
+    :param verbose: 0 - full information
+                    1 - loss each 5 epochs
+                    2 - modifying loss value along epochs
+                    3 - evolution of training as percentage of completed epochs
+    :return: data (dictionary). stores losses, num of errors and time of the different models.
+
+    """
     # shuffle train
     im_size = train_i_org.size(2)
 
@@ -424,6 +463,23 @@ def test_model_joint(train_i_org, train_c_org, train_t_org, test_i_org=None, tes
 
 def test_model_fc(train_i_org, train_c_org, train_t_org, test_i_org=None, test_c_org=None, test_t_org=None, runs=10,
                   epochs=100, l_rate=0.5, verbose=2):
+    """
+    Train and test model 1.1
+    :param train_i_org: tensor of size [n_samples, 1, 14, 14]
+    :param train_c_org: tensor of size [n_samples, 1]
+    :param train_t_org: tensor of size [n_samples]
+    :param test_i_org: tensor of size [n_samples, 1, 14, 14]
+    :param test_c_org: tensor of size [n_samples, 1]
+    :param test_t_org: tensor of size [n_samples]
+    :param runs: number of full train and evaluation of the model. (to estimate mean and std of the error)
+    :param epochs: number of iterations along all the data samples for model 1
+    :param lr: step size/ learning rate for model 1
+    :param verbose: 0 - full information
+                    1 - loss each 5 epochs
+                    2 - modifying loss value along epochs
+                    3 - evolution of training as percentage of completed epochs
+    :return: data (dictionary). stores losses, num of errors and time of the different models.
+    """
     im_size = train_i_org.size(2)
     # shuffle train
     train_i_org, train_c_org, train_t_org = shuffle(train_i_org.view(-1, 2, im_size, im_size),

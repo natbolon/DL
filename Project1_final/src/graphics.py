@@ -5,14 +5,16 @@ import torch
 def generate_graphic_two_models(loss1, loss2, data, version='columns', save=False):
     """
     Function to generate a plot of the errors/loss for models 2.1 or 2.2
-    Args:
-        loss: list containing as many lists as runs. Each inner list contains the loss along the train.
+    :param loss1: list containing as many lists as runs. Each inner list contains the loss along the train.
             size = [[n_epochs],[n_epochs],...,[n_epochs]](n_runs)
-        data: dictionary containing title, file_name, x_axis name
-        time: list of lists (same sizes as loss) containing the end time of each epoch.
-        save: boolean. If true, save the plot
-
+    :param loss2: list containing as many lists as runs. Each inner list contains the loss along the train.
+            size = [[n_epochs],[n_epochs],...,[n_epochs]](n_runs)
+    :param data: dictionary containing title, file_name, x_axis name
+    :param version: 'columns' if subplots aligned in the same column, otherwise, aligned in the same row.
+    :param save: boolean. If true, save the plot
+    :return: plot of loss along epochs and/or time
     """
+
     if version == 'columns':
         fig, ax = plt.subplots(1, 2, figsize=(18, 4))
 
@@ -67,18 +69,19 @@ def generate_graphic_two_models(loss1, loss2, data, version='columns', save=Fals
 
 def generate_multiple_graphic_loss(loss_list, data, time=None, version='columns', save=False):
     """
-        Function to generate a plot of the loss for a single model
-        Args:
-            loss_list: list containing as many lists as models. Each model lists contains as many lists as runs.
+    Function to generate a plot of the loss for a single model
+    :param loss_list: list containing as many lists as models. Each model lists contains as many lists as runs.
                         Each inner list contains the loss along the train.
                     size = [[[n_epochs],[n_epochs],...,[n_epochs]](n_runs), ..., [[n_epochs],[n_epochs],...,[n_epochs]](n_runs)] (n_models)
-            data: dictionary containing title, file_name, y_axis name
-            time: list of lists of lists (same sizes as loss) containing the end time of each epoch.
+    :param data: dictionary containing title, file_name, y_axis name
+    :param time: list of lists of lists (same sizes as loss) containing the end time of each epoch.
                 if None, a single plot is generated.
                 else, two subplots are generated: loss vs. epochs and loss vs. time
-            save: boolean. If true, save the plot
+    :param version:  'columns' if subplots aligned in the same column, otherwise, aligned in the same row.
+    :param save: boolean. If true, save the plot
+    :return: plot of losses along epochs and/or time
+    """
 
-        """
     if time is not None:
         if version == 'columns':
             fig, ax = plt.subplots(1, 2, figsize=(18, 4))  # figsize = (w, h)

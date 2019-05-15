@@ -48,7 +48,7 @@ def run():
 
     print('\n --- Evaluate models for hyperparameter tunning ---')
     # Hyperparameter tunning for model 1.1
-    print('Hyperparameter tunning for Model 1.1')
+    print('\nHyperparameter tunning for Model 1.1')
     e = 500
 
     print('training Model 1.1 with lr=0.5\n')
@@ -70,7 +70,7 @@ def run():
 
 
     # Hyperparameter tunning for model 2.1
-    print('Hyperparameter tunning for Model 2.1')
+    print('\nHyperparameter tunning for Model 2.1')
     e21 = 50
 
     print('training Model 2.1 with lr(1)=1 and lr(2)=0.5\n')
@@ -97,7 +97,7 @@ def run():
     generate_graphic_two_models([mod['error_test_m1'] for mod in m],[mod['error_test_m2'] for mod in mm], g_names, version='rows', save=True)
 
     # Weight tunning for model 3.1
-    print('Weight tunning for Model 3.1')
+    print('\nWeight tunning for Model 3.1')
     e31=120
     l_rate = 0.5
     print('\ntraining Model 3.1 with w1=0.7 and w2=0.3\n')
