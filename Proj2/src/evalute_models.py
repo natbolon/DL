@@ -67,8 +67,8 @@ def evaluate_model(model, train_input, train_target, test_input, test_target, lo
     output = model.forward(train_input)
     l = model.compute_loss(output, train_target)
 
-    print("\nLoss: ", l.item())
-    print("Number of errors: ", compute_number_error(output, train_target).item())
+    print("\nTraining Loss: ", l.item())
+    print("Training Number of errors: ", compute_number_error(output, train_target).item())
 
     id_class_train = output.argmax(dim=1)
     plot_result(train_input, train_target, id_class_train, fname=mname)
@@ -78,8 +78,8 @@ def evaluate_model(model, train_input, train_target, test_input, test_target, lo
     output = model.forward(test_input)
     l = model.compute_loss(output, test_target)
 
-    print("\nLoss: ", l.item())
-    print("Number of errors: ", compute_number_error(output, test_target).item())
+    print("\nTest Loss: ", l.item())
+    print("Test Number of errors: ", compute_number_error(output, test_target).item())
 
 
     id_class_test = output.argmax(dim=1)
