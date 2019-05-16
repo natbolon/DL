@@ -1,12 +1,11 @@
 import torch
-from torch import empty
 
 from Module import Module
 
 
 class Activation(Module):
     def __init__(self):
-        self.s = empty((0,0))
+        self.s = torch.empty((0,0))
 
     def forward(self, *input):
         raise NotImplementedError

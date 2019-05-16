@@ -1,12 +1,7 @@
 import torch
-from torch import empty
 
-from Module import Module
-from Module import Module
 from Linear import Linear
-from Activation import Tanh, Relu, Sigmoid
-from Loss import LossMSE, CrossEntropy
-from Sequential import Sequential
+
 
 class Optimizers():
     def __init__(self):

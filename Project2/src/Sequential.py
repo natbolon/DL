@@ -1,5 +1,4 @@
 import torch
-from torch import empty
 
 from Module import Module
 from Linear import Linear
