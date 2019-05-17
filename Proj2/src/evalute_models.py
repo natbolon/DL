@@ -92,4 +92,4 @@ def evaluate_model(model, train_input, train_target, test_input, test_target, lo
     if save_plot:
         plot_result(test_input, test_target, id_class_test, train=False, fname=mname)
         
-    return [train_loss, train_error, test_loss, train_error]
+    return [train_loss, train_error, test_loss, test_error]
