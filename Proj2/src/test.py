@@ -350,6 +350,12 @@ def main():
     test_loss[:,0] = out[2]
     test_error[:,0] = out[3]
     
+    train_loss = train_loss.type(torch.float)
+    test_loss = test_loss.type(torch.float)
+    train_error = train_error.type(torch.float)
+    test_error = test_error.type(torch.float)
+    
+    
     
     #For other run: no need to save plot
     for i in range(1, nb_of_run):
