@@ -147,7 +147,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     # Initialize weights
     model_4.normalize_parameters(mean=0, std=std)
     # Define optimizer
-    optimizer = Sgd(eta)
+    optimizer = DecreaseSGD(eta)
 
     # Train model
     my_loss_4 = train_model(model_4, train_input, train_target, optimizer, epochs_number, Sample_number, batch_size)
@@ -308,7 +308,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     return train_loss, train_error, test_loss, test_error
 
 def main():
-    nb_of_run = 30
+    nb_of_run = 2
     Sample_number = 1000
     
     train_loss = torch.empty((8, nb_of_run))
@@ -384,6 +384,54 @@ def main():
     plt.title('Error on test set', fontsize=20)
     plt.ylabel('Error percentage', fontsize=20)
     plt.savefig('output/{}.pdf'.format('test_error_boxplot'), bbox_inches='tight')
+    
+    print("\nmodel 1:")
+    print("train loss mean: ", train_loss[0,:].mean().item())
+    print("train error mean: ", train_error[0,:].mean().item())
+    print("test loss mean: ", test_loss[0,:].mean().item())
+    print("test error mean: ", test_error[0,:].mean().item())
+    
+    print("\nmodel 2:")
+    print("train loss mean: ", train_loss[1,:].mean().item())
+    print("train error mean: ", train_error[1,:].mean().item())
+    print("test loss mean: ", test_loss[1,:].mean().item())
+    print("test error mean: ", test_error[1,:].mean().item())
+    
+    print("\nmodel 3:")
+    print("train loss mean: ", train_loss[2,:].mean().item())
+    print("train error mean: ", train_error[2,:].mean().item())
+    print("test loss mean: ", test_loss[2,:].mean().item())
+    print("test error mean: ", test_error[2,:].mean().item())
+    
+    print("\nmodel 4:")
+    print("train loss mean: ", train_loss[3,:].mean().item())
+    print("train error mean: ", train_error[3,:].mean().item())
+    print("test loss mean: ", test_loss[3,:].mean().item())
+    print("test error mean: ", test_error[3,:].mean().item())
+    
+    print("\nmodel 5:")
+    print("train loss mean: ", train_loss[4,:].mean().item())
+    print("train error mean: ", train_error[4,:].mean().item())
+    print("test loss mean: ", test_loss[4,:].mean().item())
+    print("test error mean: ", test_error[4,:].mean().item())
+    
+    print("\nmodel 6:")
+    print("train loss mean: ", train_loss[5,:].mean().item())
+    print("train error mean: ", train_error[5,:].mean().item())
+    print("test loss mean: ", test_loss[5,:].mean().item())
+    print("test error mean: ", test_error[5,:].mean().item())
+    
+    print("\nmodel 7:")
+    print("train loss mean: ", train_loss[6,:].mean().item())
+    print("train error mean: ", train_error[6,:].mean().item())
+    print("test loss mean: ", test_loss[6,:].mean().item())
+    print("test error mean: ", test_error[6,:].mean().item())
+    
+    print("\nmodel 8:")
+    print("train loss mean: ", train_loss[7,:].mean().item())
+    print("train error mean: ", train_error[7,:].mean().item())
+    print("test loss mean: ", test_loss[7,:].mean().item())
+    print("test error mean: ", test_error[7,:].mean().item())
     
 if __name__=='__main__':
     main()
