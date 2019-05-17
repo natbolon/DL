@@ -308,7 +308,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     return train_loss, train_error, test_loss, test_error
 
 def main():
-    nb_of_run = 15
+    nb_of_run = 30
     Sample_number = 1000
     
     train_loss = torch.empty((8, nb_of_run))
@@ -368,7 +368,7 @@ def main():
 	
     #Boxplot of losses and error
     fig = plt.figure(figsize=(10,5))
-    plt.boxplot(train_loss, labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7", "model 8"])
+    plt.boxplot(train_loss[0:7,:], labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7"])
     plt.title('Loss on train set', fontsize=20)
     plt.ylabel('Loss', fontsize=20)
     plt.savefig('output/{}.pdf'.format('train_loss_boxplot'), bbox_inches='tight')
@@ -382,7 +382,7 @@ def main():
     plt.close(fig)
 
     fig = plt.figure(figsize=(10,5))
-    plt.boxplot(test_loss, labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7", "model 8"])
+    plt.boxplot(test_loss[0:7,:], labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7"])
     plt.title('Loss on test set', fontsize=20)
     plt.ylabel('Loss', fontsize=20)
     plt.savefig('output/{}.pdf'.format('test_loss_boxplot'), bbox_inches='tight')
