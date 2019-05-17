@@ -308,7 +308,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     return train_loss, train_error, test_loss, test_error
 
 def main():
-    nb_of_run = 30
+    nb_of_run = 15
     Sample_number = 1000
     
     train_loss = torch.empty((8, nb_of_run))
