@@ -50,9 +50,14 @@ class Linear(Module):
         Perform backward pass to compute gradient
         """
         # Compute backward pass and store gradient
-        self.gradwrtbias = torch.ones(1, self.x.size(dim=0)).mm(gradwrtoutput[0])
-        self.gradwrtweight = gradwrtoutput[0].t().mm(self.x)
-        return gradwrtoutput[0].mm(self.weight)
+        if self.dropout :
+            self.gradwrtbias = torch.ones(1, self.x.size(dim=0)).mm(gradwrtoutput[0] * self.dropout_mask)
+            self.gradwrtweight = (gradwrtoutput[0] * self.dropout_mask).t().mm(self.x)
+            return (gradwrtoutput[0] * self.dropout_mask).mm(self.weight)			
+        else :    
+            self.gradwrtbias = torch.ones(1, self.x.size(dim=0)).mm(gradwrtoutput[0])
+            self.gradwrtweight = gradwrtoutput[0].t().mm(self.x)
+            return gradwrtoutput[0].mm(self.weight)
         
     def param(self):
         return [self.bias, self.weight]
