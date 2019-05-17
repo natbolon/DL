@@ -126,13 +126,13 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
 
 
     # Model 4. Dropout; SGD
-    print('\nModel 4: Optimizer: Decreasing SGD; Dropout; ReLU; CrossEntropy')
+    print('\nModel 4: Optimizer: SGD; Dropout; ReLU; CrossEntropy')
 
     # Define model name for plots
     mname='Model4'
 
     # Define structure of the network
-    dropout = 0.25
+    dropout = 0.15
 
     linear_1 = Linear(2, hidden_nb)
     relu_1 = Relu()
@@ -147,7 +147,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     # Initialize weights
     model_4.normalize_parameters(mean=0, std=std)
     # Define optimizer
-    optimizer = DecreaseSGD(eta)
+    optimizer = Sgd(eta)
 
     # Train model
     my_loss_4 = train_model(model_4, train_input, train_target, optimizer, epochs_number, Sample_number, batch_size)
@@ -159,7 +159,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     # PLOT TO COMPARE DROPOUT AND NO DROPOUT
     if save_plot:
         fig = plt.figure(figsize=(10,4))
-        plt.plot(range(0, epochs_number), my_loss_2, linewidth=1)
+        plt.plot(range(0, epochs_number), my_loss_1, linewidth=1)
         plt.plot(range(0, epochs_number), my_loss_4, linewidth=1)
         plt.legend(["Without Dropout", "With Dropout"])
         plt.title("Loss")
@@ -308,7 +308,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     return train_loss, train_error, test_loss, test_error
 
 def main():
-    nb_of_run = 2
+    nb_of_run = 15
     Sample_number = 1000
     
     train_loss = torch.empty((8, nb_of_run))
@@ -372,72 +372,37 @@ def main():
     plt.title('Loss on train set', fontsize=20)
     plt.ylabel('Loss', fontsize=20)
     plt.savefig('output/{}.pdf'.format('train_loss_boxplot'), bbox_inches='tight')
+    plt.close(fig)
     
     fig = plt.figure(figsize=(10,5))
     plt.boxplot(train_error.mul_(100).div_(Sample_number), labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7", "model 8"])
     plt.title('Error on train set', fontsize=20)
     plt.ylabel('Error percentage', fontsize=20)
     plt.savefig('output/{}.pdf'.format('train_error_boxplot'), bbox_inches='tight')
-    
+    plt.close(fig)
+
     fig = plt.figure(figsize=(10,5))
     plt.boxplot(test_loss, labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7", "model 8"])
     plt.title('Loss on test set', fontsize=20)
     plt.ylabel('Loss', fontsize=20)
     plt.savefig('output/{}.pdf'.format('test_loss_boxplot'), bbox_inches='tight')
-    
+    plt.close(fig)
+
     fig = plt.figure(figsize=(10,5))
     plt.boxplot(test_error.mul_(100).div_(Sample_number), labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7", "model 8"])
     plt.title('Error on test set', fontsize=20)
     plt.ylabel('Error percentage', fontsize=20)
     plt.savefig('output/{}.pdf'.format('test_error_boxplot'), bbox_inches='tight')
-    
-    print("\nmodel 1:")
-    print("train loss mean: ", train_loss[0,:].mean().item())
-    print("train error mean: ", train_error[0,:].mean().item())
-    print("test loss mean: ", test_loss[0,:].mean().item())
-    print("test error mean: ", test_error[0,:].mean().item())
-    
-    print("\nmodel 2:")
-    print("train loss mean: ", train_loss[1,:].mean().item())
-    print("train error mean: ", train_error[1,:].mean().item())
-    print("test loss mean: ", test_loss[1,:].mean().item())
-    print("test error mean: ", test_error[1,:].mean().item())
-    
-    print("\nmodel 3:")
-    print("train loss mean: ", train_loss[2,:].mean().item())
-    print("train error mean: ", train_error[2,:].mean().item())
-    print("test loss mean: ", test_loss[2,:].mean().item())
-    print("test error mean: ", test_error[2,:].mean().item())
-    
-    print("\nmodel 4:")
-    print("train loss mean: ", train_loss[3,:].mean().item())
-    print("train error mean: ", train_error[3,:].mean().item())
-    print("test loss mean: ", test_loss[3,:].mean().item())
-    print("test error mean: ", test_error[3,:].mean().item())
-    
-    print("\nmodel 5:")
-    print("train loss mean: ", train_loss[4,:].mean().item())
-    print("train error mean: ", train_error[4,:].mean().item())
-    print("test loss mean: ", test_loss[4,:].mean().item())
-    print("test error mean: ", test_error[4,:].mean().item())
-    
-    print("\nmodel 6:")
-    print("train loss mean: ", train_loss[5,:].mean().item())
-    print("train error mean: ", train_error[5,:].mean().item())
-    print("test loss mean: ", test_loss[5,:].mean().item())
-    print("test error mean: ", test_error[5,:].mean().item())
-    
-    print("\nmodel 7:")
-    print("train loss mean: ", train_loss[6,:].mean().item())
-    print("train error mean: ", train_error[6,:].mean().item())
-    print("test loss mean: ", test_loss[6,:].mean().item())
-    print("test error mean: ", test_error[6,:].mean().item())
-    
-    print("\nmodel 8:")
-    print("train loss mean: ", train_loss[7,:].mean().item())
-    print("train error mean: ", train_error[7,:].mean().item())
-    print("test loss mean: ", test_loss[7,:].mean().item())
-    print("test error mean: ", test_error[7,:].mean().item())
+    plt.close(fig)
+
+    for i in range(len(train_loss)):
+        print('\nmodel {}:'.format(i+1))
+
+        print('train loss mean: {:0.4f}'.format(train_loss[i,:].mean().item()))
+        print('train error mean: {:0.4f}'.format(train_error[i, :].mean().item()))
+        print('test loss mean: {:0.4f}'.format(test_loss[i, :].mean().item()))
+        print('test error mean: {:0.4f}'.format(test_error[i, :].mean().item()))
+
     
 if __name__=='__main__':
     main()
