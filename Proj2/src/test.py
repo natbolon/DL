@@ -12,31 +12,7 @@ from data_generation import generate_disc_set, plot_disc
 from evalute_models import compute_number_error, evaluate_model, train_model
 
 
-def run_all_model(Sample_number, save_plot=False):
-
-    # Do NOT show plots
-    plt.ioff()
-    if save_plot:
-        print('ATTENTION: PLOTS WILL NOT BE SHOWN. \nALL OF THEM ARE STORED IN THE OUTPUT FOLDER')
-
-    # Generate data
-    print('Generate data')
-    train_input, train_target = generate_disc_set(Sample_number)
-    test_input, test_target = generate_disc_set(Sample_number)
-
-    # Visualize data
-    if save_plot:
-        plot_disc(train_input, train_target, "Train data before normalization")
-
-    # Normalize data
-    mu, std = train_input.mean(0), train_input.std(0)
-    train_input.sub_(mu).div_(std)
-    test_input.sub_(mu).div_(std)
-
-    # Plot train and test samples after normalization
-    if save_plot:
-        plot_disc(train_input, train_target, "Train data after normalization")
-        plot_disc(test_input, test_target, "Test data after normalization")
+def run_all_model(train_input, train_target, test_input, test_target, Sample_number, save_plot=False):
 
     # Define constants along the test
     hidden_nb = 25
@@ -342,9 +318,35 @@ def main():
     test_loss = torch.empty((8, nb_of_run))
     test_error = torch.empty((8, nb_of_run))
     
+    # Do NOT show plots
+    plt.ioff()
+
+    print('ATTENTION: PLOTS WILL NOT BE SHOWN. \nALL OF THEM ARE STORED IN THE OUTPUT FOLDER')
+
+    # Generate data
+    print('Generate data')
+    train_input, train_target = generate_disc_set(Sample_number)
+    test_input, test_target = generate_disc_set(Sample_number)
+
+    # Visualize data
+    plot_disc(train_input, train_target, "Train data before normalization")
+
+    # Normalize data
+    mu, std = train_input.mean(0), train_input.std(0)
+    train_input.sub_(mu).div_(std)
+    test_input.sub_(mu).div_(std)
+
+    # Plot train and test samples after normalization
+    plot_disc(train_input, train_target, "Train data after normalization")
+    plot_disc(test_input, test_target, "Test data after normalization")
+    
+    
+    
+    
+    
     #First run: plot are saved
     print("Run number 1 /", nb_of_run, ":\n")
-    out = run_all_model(Sample_number, save_plot=True)
+    out = run_all_model(train_input, train_target, test_input, test_target, Sample_number, save_plot=True)
     train_loss[:,0] = out[0]
     train_error[:,0] = out[1]
     test_loss[:,0] = out[2]
@@ -354,7 +356,7 @@ def main():
     #For other run: no need to save plot
     for i in range(1, nb_of_run):
         print("\n\n\nRun number ",i+1 ,"/", nb_of_run, ":\n")
-        out = run_all_model(Sample_number, save_plot=False)
+        out = run_all_model(train_input, train_target, test_input, test_target, Sample_number, save_plot=False)
         train_loss[:,i] = out[0]
         train_error[:,i] = out[1]
         test_loss[:,i] = out[2]
@@ -385,10 +387,5 @@ def main():
     plt.ylabel('Error pourcentage', fontsize=20)
     plt.savefig('output/{}.pdf'.format('test_error_boxplot'), bbox_inches='tight')
     
-
-
-    
-
-
 if __name__=='__main__':
     main()
