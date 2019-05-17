@@ -40,7 +40,7 @@ There are no command line arguments.
 The program will output the following progress updates though the standard output. 
 
 ```
-Run number 1 / 30 :
+Run number 1 / 15 :
 
 ATTENTION: PLOTS WILL NOT BE SHOWN.
 ALL OF THEM ARE STORED IN THE OUTPUT FOLDER
@@ -69,12 +69,12 @@ Number of errors:  x
 Evaluation done!
 
 
-Run number 2 / 30 :
+Run number 2 / 15 :
 
 ...
 ...
 
-Run number 30 / 30 :
+Run number 15 / 15 :
 
 ...
 
