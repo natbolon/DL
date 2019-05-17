@@ -76,11 +76,14 @@ def evaluate_model(model, train_input, train_target, test_input, test_target, lo
         plot_result(train_input, train_target, id_class_train, fname=mname)
         plot_loss(range(0, epochs_number), loss, fname=mname)
 
+    # Deactivate dropout to test models
+    model.enable_dropout(False)
+        
     # Evaluate Model in test set
     output = model.forward(test_input)
     test_loss = model.compute_loss(output, test_target).item()
     test_error = compute_number_error(output, test_target).item()
-	
+
     print("\nTest Loss: ", test_loss)
     print("Test Number of errors: ", test_error)
 

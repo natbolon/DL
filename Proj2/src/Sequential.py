@@ -94,3 +94,12 @@ class Sequential(Module):
         for step in reversed(self.sequence):
             if step.param() != []:
                 step.update_parameters(eta)
+        
+    def enable_dropout(enable=True):
+        """
+        Enable or disable dropout mask of the Linear layer
+        """
+        # Update dropout bool value
+        for step in self.sequence:
+            if type(step) == Linear:
+                step.enable_dropout(enable)

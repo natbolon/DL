@@ -25,8 +25,10 @@ class Linear(Module):
                 raise ValueError('Linear : Dropout must be a percentage value (comprise between 0 and 1)')
             else:
                 self.dropout = dropout*100
+                self.is_dropout = True
         else:
             self.dropout = dropout
+            self.is_dropout = False
                 
         self.dropout_mask = torch.empty((0,0))
     
@@ -39,7 +41,7 @@ class Linear(Module):
         self.x = input[0]
         self.s = self.x.mm(self.weight.t()) + self.bias
         
-        if self.dropout :
+        if self.dropout and self.is_dropout:
             self.update_dropout()
             return self.s * self.dropout_mask
         else :
@@ -50,10 +52,10 @@ class Linear(Module):
         Perform backward pass to compute gradient
         """
         # Compute backward pass and store gradient
-        if self.dropout :
+        if self.dropout and self.is_dropout:
             self.gradwrtbias = torch.ones(1, self.x.size(dim=0)).mm(gradwrtoutput[0] * self.dropout_mask)
             self.gradwrtweight = (gradwrtoutput[0] * self.dropout_mask).t().mm(self.x)
-            return (gradwrtoutput[0] * self.dropout_mask).mm(self.weight)			
+            return (gradwrtoutput[0] * self.dropout_mask).mm(self.weight)
         else :    
             self.gradwrtbias = torch.ones(1, self.x.size(dim=0)).mm(gradwrtoutput[0])
             self.gradwrtweight = gradwrtoutput[0].t().mm(self.x)
@@ -119,3 +121,10 @@ class Linear(Module):
         # Update dropout mask
         self.dropout_mask = torch.randint(101, self.s.size())
         self.dropout_mask = (self.dropout_mask >= self.dropout).type(torch.FloatTensor)
+        
+    def enable_dropout(enable=True):
+        """
+        Enable or disable dropout mask
+        """
+        # Update dropout bool value
+        self.is_dropout = enable
