@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import math
 
 import torch
-from torch import empty
 
 def generate_disc_set(nb):
     """
@@ -13,8 +12,8 @@ def generate_disc_set(nb):
     X: torch tensor of size [nb, 2] with the coordinates x,y of each point
     Y: torch tensor of size [nb] with binary entries (0,1) according to the label of each sample
     """
-    X = empty(nb, 2).uniform_(0, 1)
-    Y = empty(X.size())
+    X = torch.empty(nb, 2).uniform_(0, 1)
+    Y = torch.empty(X.size())
 
     Y[:, 0] = ((X - 0.5).norm(dim=1) > math.sqrt(1 / (2 * math.pi))).type(torch.LongTensor)
     Y[:, 1] = ((X - 0.5).norm(dim=1) <= math.sqrt(1 / (2 * math.pi))).type(torch.LongTensor)

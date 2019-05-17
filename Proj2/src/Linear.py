@@ -1,6 +1,5 @@
 import math
 import torch
-from torch import empty
 
 from Module import Module
 

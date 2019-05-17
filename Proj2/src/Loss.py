@@ -1,13 +1,12 @@
 import torch
-from torch import empty
 
 from Module import Module
 
 
 class Loss(Module):
     def __init__(self):
-        self.output = empty((0,0))
-        self.target_output = empty((0,0))
+        self.output = torch.empty((0,0))
+        self.target_output = torch.empty((0,0))
     
     def forward(self, *input):
         raise NotImplementedError
