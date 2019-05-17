@@ -50,7 +50,7 @@ def train_model(model,train_input, train_target, optimizer, epochs_number, Sampl
 
 
 
-def evaluate_model(model, train_input, train_target, test_input, test_target, loss, mname=None):
+def evaluate_model(model, train_input, train_target, test_input, test_target, loss, save_plot, mname=None):
     """
     Evaluate performance of the model in terms of errors and generate plots
     :param model: instance of Sequence. Model already trained!
@@ -65,22 +65,28 @@ def evaluate_model(model, train_input, train_target, test_input, test_target, lo
     # Evalute Model in train set
     epochs_number = len(loss)
     output = model.forward(train_input)
-    l = model.compute_loss(output, train_target)
+    train_loss = model.compute_loss(output, train_target).item()
+    train_error = compute_number_error(output, train_target).item()
 
-    print("\nTraining Loss: ", l.item())
-    print("Training Number of errors: ", compute_number_error(output, train_target).item())
+    print("\nTraining Loss: ", train_loss)
+    print("Training Number of errors: ", train_error)
 
     id_class_train = output.argmax(dim=1)
-    plot_result(train_input, train_target, id_class_train, fname=mname)
-    plot_loss(range(0, epochs_number), loss, fname=mname)
+    if save_plot:
+        plot_result(train_input, train_target, id_class_train, fname=mname)
+        plot_loss(range(0, epochs_number), loss, fname=mname)
 
     # Evaluate Model in test set
     output = model.forward(test_input)
-    l = model.compute_loss(output, test_target)
-
-    print("\nTest Loss: ", l.item())
-    print("Test Number of errors: ", compute_number_error(output, test_target).item())
+    test_loss = model.compute_loss(output, test_target).item()
+    test_error = compute_number_error(output, test_target).item()
+	
+    print("\nTest Loss: ", test_loss)
+    print("Test Number of errors: ", test_error)
 
 
     id_class_test = output.argmax(dim=1)
-    plot_result(test_input, test_target, id_class_test, train=False, fname=mname)
+    if save_plot:
+        plot_result(test_input, test_target, id_class_test, train=False, fname=mname)
+        
+    return [train_loss, train_error, test_loss, train_error]

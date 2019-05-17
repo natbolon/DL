@@ -40,6 +40,8 @@ There are no command line arguments.
 The program will output the following progress updates though the standard output. 
 
 ```
+Run number 1 / 30 :
+
 ATTENTION: PLOTS WILL NOT BE SHOWN.
 ALL OF THEM ARE STORED IN THE OUTPUT FOLDER
 Generate data
@@ -65,13 +67,26 @@ Evaluation of base model with MSE loss
 Loss:  xxx
 Number of errors:  x
 Evaluation done!
+
+
+Run number 2 / 30 :
+
+...
+...
+
+Run number 30 / 30 :
+
+...
+
+Evaluation done!
+
 ```
 
 Where for both the training and test of the models, a percentage of the completed training is shown for each run and each model. The final loss and number of errors in the train and test datasets is also provided.
 
 Additionally, the program generates different plots that are stored in `../output`
 
-The whole program may take around **2 minutes to complete the execution**. 
+The whole program may take around **25 minutes to complete the execution**. 
 
 
 ## Authors
