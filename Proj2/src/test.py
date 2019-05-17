@@ -21,8 +21,6 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     batch_size = 200
     epochs_number = 1000
 
-
-    
     # Model 1. No dropout; constant learning rate (SGD)
     print('\nModel 1: Optimizer: SGD; No dropout; ReLU; CrossEntropy')
 
