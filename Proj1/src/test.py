@@ -6,7 +6,7 @@ from torch.autograd import Variable
 
 from dlc_practical_prologue import generate_pair_sets
 from generate_data import shuffle, normalize_data
-from graphics import generate_multiple_graphic_loss, generate_graphic_two_models
+from graphics import generate_multiple_graphic_loss, generate_graphic_two_models, error_comparison
 from train import test_model_fc, test_model_separate, test_model_joint
 
 def run():
@@ -119,30 +119,25 @@ def run():
 
     print('\nEvaluate model 1.1')
     # evaluate model 1.1 in TEST set
-    d_model_11 = test_model_fc(train_input, train_classes, train_target,test_i_org=test_input, test_c_org=test_classes, test_t_org=test_target, runs=r, epochs=220, l_rate=1e-2, verbose=3)
+    d_model_11 = test_model_fc(train_input, train_classes, train_target,test_i_org=test_input, test_c_org=test_classes, test_t_org=test_target, runs=r, epochs=35, l_rate=1e-1, verbose=v)
 
     print('\nEvaluate model 1.2')
     # evaluate model 1.2 in TEST set
-    d_model_12 = test_model_joint(train_input, train_classes, train_target, test_input, test_classes, test_target, runs=r, epochs=35, w1=0, lr=0.1, verbose=3)
+    d_model_12 = test_model_joint(train_input, train_classes, train_target, test_input, test_classes, test_target, runs=r, epochs=35, w1=0, lr=0.1, verbose=v)
 
     print('\nEvaluate model 2.1')
     # evaluate model 2.1 in TEST set
-    d_model_21 = test_model_separate(train_input, train_classes, train_target, test_input, test_classes, test_target, runs=r, epochs=30, epochs2=25, version=0, lr=0.1, verbose=2)
+    d_model_21 = test_model_separate(train_input, train_classes, train_target, test_input, test_classes, test_target, runs=r, epochs=30, epochs2=25, version=0, lr=0.1, verbose=v)
 
     print('\nEvaluate model 2.2')
     # evaluate model 2.2 in TEST set
-    d_model_22 = test_model_separate(train_input, train_classes, train_target, test_input, test_classes, test_target, runs=r, epochs=30, epochs2=25, version=1, lr=0.1, verbose=2)
+    d_model_22 = test_model_separate(train_input, train_classes, train_target, test_input, test_classes, test_target, runs=r, epochs=30, epochs2=25, version=1, lr=0.1, verbose=v)
 
     print('\nEvaluate model 3.1')
     # evaluate model 3.1 in TEST set
-    d_model_31 = test_model_joint(train_input, train_classes, train_target, test_input, test_classes, test_target, runs=r, epochs=55, lr=0.5, verbose=2, w1=0.7, w2=0.3)
-
-    # generate graphic to compare single models in terms of errors along epochs and time
-    m = [d_model_11, d_model_12, d_model_31]
-    l = ['Model 1.1','Model 1.2', 'Model 3.1']
-
-    g_names = {'file_name': 'comparison_single_models', 'title': 'Test Error for target prediction', 'y_axis': 'Errors' , 'legend': l}
-    generate_multiple_graphic_loss([ d_model_11['error_test'], d_model_12['error_test_m2'], d_model_31['error_test_m2']], g_names, [mod['time'] for mod in m],version='rows',save=True)
+    d_model_31 = test_model_joint(train_input, train_classes, train_target, test_input, test_classes, test_target, runs=r, epochs=55, lr=0.5, verbose=v, w1=0.7, w2=0.3)
+    
+    error_comparison(d_model_11, d_model_12, d_model_21, d_model_22, d_model_31)
 
     print('DONE!')
 

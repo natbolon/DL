@@ -148,3 +148,42 @@ def generate_multiple_graphic_loss(loss_list, data, time=None, version='columns'
     if save:
         plt.savefig('../output/{}.pdf'.format(data['file_name']), bbox_inches='tight')
     plt.close(fig)
+
+
+def error_comparison(m11, m12, m21, m22, m31, save=True):
+    """
+    Generate boxplot of error on test set and time required for training  for each of the models
+    :param m11: dictionary of data from model 1.1
+    :param m12: dictionary of data from model 1.2
+    :param m21: dictionary of data from model 2.1
+    :param m22: dictionary of data from model 2.2
+    :param m31: dictionary of data from model 3.1
+    :param save: boolean. save the plot in the folder output
+    """
+
+    # Define time for each model
+    t_m11 = [m11['time'][i][-1] for i in range(len(m11['time']))]
+    t_m12 = [m12['time'][i][-1] for i in range(len(m12['time']))]
+
+    t_m21 = [m21['time_m1'][i][-1] + m21['time_m2'][i][-1] for i in range(len(m21['time_m1']))]
+    t_m22 = [m22['time_m1'][i][-1] + m22['time_m2'][i][-1] + m22['time_m12'][i][-1] for i in range(len(m22['time_m1']))]
+
+    t_m31 = [m31['time'][i][-1] for i in range(len(m31['time']))]
+
+    # list of times
+    times = [t_m11, t_m12, t_m21, t_m22, t_m31]
+
+    # labels for plot
+    labs = ['Model 1.1', 'Model 1.2', 'Model 2.1', 'Model 2.2', 'Model 3.1']
+
+    fig, ax = plt.subplots(1, 2, figsize=(10,4))
+    ax[0].boxplot([d['nb_error_test'] for d in [m11, m12, m21, m22, m31]], labels=labs)
+    ax[0].set_title('Error on test set', fontsize=20)
+    ax[0].set_ylabel('Error percentage', fontsize=16)
+
+    ax[1].boxplot(times, labels=labs)
+    ax[1].set_title('Training time', fontsize=20)
+    ax[1].set_ylabel('Time [s]', fontsize=16)
+    if save:
+        plt.savefig('../output/{}.pdf'.format('error_boxplot'), bbox_inches='tight')
+    plt.close(fig)
