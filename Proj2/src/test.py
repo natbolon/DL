@@ -126,7 +126,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
 
 
     # Model 4. Dropout; SGD
-    print('\nModel 4: Optimizer: SGD; Dropout; ReLU; CrossEntropy')
+    print('\nModel 4: Optimizer: Decreasing SGD; Dropout; ReLU; CrossEntropy')
 
     # Define model name for plots
     mname='Model4'
@@ -159,7 +159,7 @@ def run_all_model(train_input, train_target, test_input, test_target, Sample_num
     # PLOT TO COMPARE DROPOUT AND NO DROPOUT
     if save_plot:
         fig = plt.figure(figsize=(10,4))
-        plt.plot(range(0, epochs_number), my_loss_1, linewidth=1)
+        plt.plot(range(0, epochs_number), my_loss_2, linewidth=1)
         plt.plot(range(0, epochs_number), my_loss_4, linewidth=1)
         plt.legend(["Without Dropout", "With Dropout"])
         plt.title("Loss")
@@ -370,7 +370,7 @@ def main():
     fig = plt.figure(figsize=(10,5))
     plt.boxplot(train_error.mul_(100).div_(Sample_number), labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7", "model 8"])
     plt.title('Error on train set', fontsize=20)
-    plt.ylabel('Error pourcentage', fontsize=20)
+    plt.ylabel('Error percentage', fontsize=20)
     plt.savefig('output/{}.pdf'.format('train_error_boxplot'), bbox_inches='tight')
     
     fig = plt.figure(figsize=(10,5))
@@ -382,7 +382,7 @@ def main():
     fig = plt.figure(figsize=(10,5))
     plt.boxplot(test_error.mul_(100).div_(Sample_number), labels=["model 1", "model 2", "model 3", "model 4", "model 5", "model 6", "model 7", "model 8"])
     plt.title('Error on test set', fontsize=20)
-    plt.ylabel('Error pourcentage', fontsize=20)
+    plt.ylabel('Error percentage', fontsize=20)
     plt.savefig('output/{}.pdf'.format('test_error_boxplot'), bbox_inches='tight')
     
 if __name__=='__main__':

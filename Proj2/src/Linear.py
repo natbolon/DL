@@ -122,7 +122,7 @@ class Linear(Module):
         self.dropout_mask = torch.randint(101, self.s.size())
         self.dropout_mask = (self.dropout_mask >= self.dropout).type(torch.FloatTensor)
         
-    def enable_dropout(enable=True):
+    def enable_dropout(self, enable=True):
         """
         Enable or disable dropout mask
         """
