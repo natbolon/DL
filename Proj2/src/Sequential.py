@@ -95,7 +95,7 @@ class Sequential(Module):
             if step.param() != []:
                 step.update_parameters(eta)
         
-    def enable_dropout(enable=True):
+    def enable_dropout(self, enable=True):
         """
         Enable or disable dropout mask of the Linear layer
         """
